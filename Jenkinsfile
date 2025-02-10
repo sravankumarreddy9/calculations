@@ -37,6 +37,24 @@ pipeline {
                 }
             }
         }
+        stage('Send Email') {
+            steps {
+                script {
+                    try {
+                        emailext(
+                            subject: "Jenkins Build Notification",
+                            body: "Pipeline executed successfully!",
+                            to: "venkatasravankumarreddy10@gmail.com",
+                            replyTo: "noreply@gmail.com",
+                            from: "your-email@gmail.com"
+                        )
+                        echo "✅ Email sent successfully!"
+                    } catch (Exception e) {
+                        echo "❌ Email sending failed: ${e.getMessage()}"
+                    }
+                }
+            }
+        }
     }
 
     post {
