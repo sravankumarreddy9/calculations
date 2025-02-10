@@ -48,10 +48,17 @@ pipeline {
                             replyTo: "noreply@gmail.com",
                             from: "your-email@gmail.com"
                         )
-                        echo "✅ Email sent successfully!"
+                        
                     } catch (Exception e) {
-                        echo "❌ Email sending failed: ${e.getMessage()}"
-                    }
+                echo "❌ Email sending failed: ${e.getMessage()}"
+                sleep(20)  // Wait for 20 seconds before retrying
+                emailext(
+                    subject: "Jenkins Build Notification - Retry",
+                    body: "Pipeline executed successfully! (Retry)",
+                    to: "venkatasravankumarreddy10@gmail.com",
+                    mimeType: 'text/plain'
+                )
+            }
                 }
             }
         }
