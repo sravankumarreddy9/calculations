@@ -42,23 +42,31 @@ pipeline {
                 script {
                     try {
                         emailext(
-                            subject: "Jenkins Build Notification",
-                            body: "Pipeline executed successfully!",
-                            to: "venkatasravankumarreddy10@gmail.com",
-                            replyTo: "noreply@gmail.com",
-                            from: "your-email@gmail.com"
+                            to: "${EMAIL_RECIPIENT}",
+                            subject: "Jenkins Build Success: Python Script Output",
+                            body: """
+                            Hello,
+
+                            The Jenkins pipeline executed successfully.
+                            Below is the output of the Python script:
+
+                            ${env.PYTHON_OUTPUT}
+
+                            Regards,
+                            Jenkins
+                            """,
+                            mimeType: 'text/plain'
                         )
-                        
                     } catch (Exception e) {
-                echo "❌ Email sending failed: ${e.getMessage()}"
-                sleep(20)  // Wait for 20 seconds before retrying
-                emailext(
-                    subject: "Jenkins Build Notification - Retry",
-                    body: "Pipeline executed successfully! (Retry)",
-                    to: "venkatasravankumarreddy10@gmail.com",
-                    mimeType: 'text/plain'
-                )
-            }
+                        echo "Email sending failed: ${e.getMessage()}"
+                        sleep(20)  // Wait for 20 seconds before retrying
+                        emailext(
+                            to: "${EMAIL_RECIPIENT}",
+                            subject: "Jenkins Build Notification - Retry",
+                            body: "Pipeline executed successfully! (Retry)",
+                            mimeType: 'text/plain'
+                        )
+                    }
                 }
             }
         }
@@ -68,11 +76,7 @@ pipeline {
         success {
             echo "Pipeline executed successfully!"
             // Send email with Python script output as notification
-            emailext(
-                to: "${EMAIL_RECIPIENT}",
-                subject: "Jenkins Pipeline Success: Python Script Results",
-                body: "The Python script executed successfully. Here is the output:\n\n${env.PYTHON_OUTPUT}"
-            )
+          
         }
         failure {
             echo "Pipeline failed. Check the logs!"
