@@ -7,7 +7,7 @@ def calculate_devices_years():
         "iPhone 14": "18-Oct-2023",
         "Mi 12 Pro": "25-Sep-2022",
         "R15M": "01-Jul-2022",
-        "KTM 390 Adv": "14-Feb-2023",
+        "KTM 390 Adv": "14-Feb-2024",
         "ASUS TUF Laptop": "18-Oct-2023"
         
     }
